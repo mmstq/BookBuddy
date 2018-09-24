@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:icon="@drawable/filter"
+        android:title=""
+        android:id="@+id/category"
+        app:showAsAction="always">
+
+        <menu>
+            <item
+                android:title="B.Tech"
+                android:id="@+id/btech"/>
+
+            <item
+                android:title="M.Tech"
+                android:id="@+id/mtech"/>
+
+            <item
+                android:title="Medical"
+                android:id="@+id/medical"/>
+
+            <item
+                android:title="Law"
+                android:id="@+id/law"/>
+
+            <item
+                android:title="Other"
+                android:id="@+id/other"/>
+
+            <item
+                android:id="@+id/all"
+                android:title="All"/>
+        </menu>
+
+    </item>
+
+</menu>

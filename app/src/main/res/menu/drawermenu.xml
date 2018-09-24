@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/topest">
+        <item
+            android:id="@+id/home"
+            android:title="Home"
+            android:icon="@drawable/home" />
+    </group>
+
+    <group
+        android:id="@+id/top">
+        <item
+            android:id="@+id/about"
+            android:title="About"
+            android:icon="@drawable/about" />
+    </group>
+    <group
+        android:id="@+id/middle">
+        <item
+            android:id="@+id/share"
+            android:title="Share"
+            android:icon="@drawable/share"/>
+    </group>
+    <group
+        android:id="@+id/bottom">
+        <item android:id="@+id/click_me"
+            android:title="Click Me"
+            android:icon="@drawable/click"
+            />
+    </group>
+
+
+</menu>
