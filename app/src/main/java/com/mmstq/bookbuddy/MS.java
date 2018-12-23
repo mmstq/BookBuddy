@@ -11,7 +11,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 
-public class MessagingService extends FirebaseMessagingService {
+public class MS extends FirebaseMessagingService {
     private static int count = 0;
 
     @Override
@@ -32,7 +32,9 @@ public class MessagingService extends FirebaseMessagingService {
                 .setSound(defaultSoundUri);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(count, notificationBuilder.build());
+        if (notificationManager != null) {
+            notificationManager.notify(count, notificationBuilder.build());
+        }
         count++;
     }
 

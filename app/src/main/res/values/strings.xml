@@ -1,16 +1,18 @@
 <resources>
     <string name="app_name">Book Buddy</string>
-    <string name="first_heading_sell">Want To Sell Or Donate Book</string>
+    <string name="first_heading_sell">Wanna Sell Or Donate Book</string>
     <string name="IInd_heading">Fill Out Some Details And You Are Good To Go</string>
     <string name="sell_or_donate">Select If You Want To Donate</string>
     <string name="address">Hostel Name And Room No</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="default_url"><![CDATA[https://firebasestorage.googleapis.com/v0/b/bookbuddy–e2fae.appspot.com/o/images%2Fbb.png?alt=media&token=422ab93a–b314–4c5e-8cca-54e37cd39d3b]]></string>
     <string name="contact">Name: Mohd Mustak\nE-Mail: Mohdmushtak59@gmail.com\nPhone: +917011152375\n</string>
     <string name="exit"><b>Press AGAIN To Exit</b></string>
     <string name="spinner_error">Select Category</string>
-    <string name="heading">"Sell Or Donate Your Books You Don't Need Anymore Within MDU Campus\nLink: "</string>
     <string name="caution">"Keep Following Things In Mind While Buying Or Selling Book On Book Buddy\n\n1. Look For Library TAG. Never Buy Library Book\n\n2. Verify Edition, Semester And Author Then Buy."</string>
+    <string name="app_about">BookBuddy Is A University Exclusive App To Buy, Sell Or Donate Used Books Within MDU Campus Only.</string>
+    <string name="imgsltd">Image Selected Successfully</string>
     <string-array name="Category">
         <item>Select Category</item>
         <item>B.Tech</item>

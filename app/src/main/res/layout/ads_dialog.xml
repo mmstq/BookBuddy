@@ -1,268 +1,269 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/transparent">
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:background="@android:color/transparent"
+   android:orientation="vertical">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        app:cardBackgroundColor="@android:color/white"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="16dp"
-        app:cardUseCompatPadding="true">
+   <android.support.v7.widget.CardView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentStart="true"
+      android:layout_centerVertical="true"
+      app:cardBackgroundColor="@android:color/white"
+      app:cardCornerRadius="10dp"
+      app:cardElevation="16dp"
+      app:cardUseCompatPadding="true">
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
+      <RelativeLayout
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content">
+
+         <ScrollView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <RelativeLayout
-                android:id="@+id/relativelayout1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingStart="18dp"
-                    android:paddingEnd="10dp"
-                    android:paddingTop="10dp">
+               <ImageView
+                  android:id="@+id/book"
+                  android:layout_width="match_parent"
+                  android:layout_height="230dp"
+                  android:paddingBottom="5dp"
+                  android:scaleType="centerCrop" />
 
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/ic_launcher" />
+               <TextView
+                  android:id="@+id/title1"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@id/book"
+                  android:layout_gravity="center_vertical"
+                  android:fontFamily="sans-serif-condensed"
+                  android:maxLines="2"
+                  android:paddingStart="10dp"
+                  android:paddingEnd="10dp"
+                  android:text="Book Name"
+                  android:textColor="#2f6699"
+                  android:textSize="16sp"
+                  android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/title1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:fontFamily="sans-serif-condensed"
-                        android:maxLines="2"
-                        android:paddingEnd="10dp"
-                        android:paddingStart="10dp"
-                        android:text="Book Name"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+               <TextView
+                  android:id="@+id/description"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@id/title1"
+                  android:layout_marginStart="16dp"
+                  android:fontFamily="sans-serif-condensed"
+                  android:paddingEnd="16dp"
+                  android:text="Description: "
+                  android:textSize="15sp"
+                  android:textStyle="bold" />
 
-                </LinearLayout>
+               <TextView
+                  android:id="@+id/desc"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@id/description"
+                  android:layout_marginStart="16dp"
+                  android:fontFamily="sans-serif-condensed"
+                  android:paddingEnd="6dp"
+                  android:text="Hi Ther This Is A Description box of fancy dialog in my app"
+                  android:textSize="15sp"
+                  android:textStyle="normal" />
+
+               <LinearLayout
+                  android:id="@+id/ll2"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@id/desc"
+                  android:layout_marginStart="16dp"
+                  android:orientation="horizontal">
+
+                  <TextView
+                     android:id="@+id/adres"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:fontFamily="sans-serif-condensed"
+                     android:text="Address: "
+                     android:textSize="15sp"
+                     android:textStyle="bold" />
+
+                  <TextView
+                     android:id="@+id/address"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:fontFamily="sans-serif-condensed"
+                     android:maxLines="2"
+                     android:text="Boys Hostel 4 Room No. 254"
+                     android:textSize="15sp"
+                     android:textStyle="normal" />
+
+               </LinearLayout>
+
+               <TextView
+                  android:id="@+id/cat"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@id/ll2"
+                  android:layout_marginStart="16dp"
+                  android:fontFamily="sans-serif-condensed"
+                  android:text="For: "
+                  android:textSize="15sp"
+                  android:textStyle="bold" />
+
+               <TextView
+                  android:id="@+id/cate"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_alignTop="@id/cat"
+                  android:layout_toEndOf="@id/cat"
+                  android:fontFamily="sans-serif-condensed"
+                  android:text="B.Tech"
+                  android:textSize="15sp"
+                  android:textStyle="normal" />
+
+               <TextView
+                  android:id="@+id/sem"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_alignTop="@id/cate"
+                  android:layout_marginStart="5dp"
+                  android:layout_toEndOf="@id/cate"
+                  android:fontFamily="sans-serif-condensed"
+                  android:maxLines="1"
+                  android:text="Sem: "
+                  android:textSize="15sp"
+                  android:textStyle="bold" />
+
+               <TextView
+                  android:id="@+id/semester_text"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_alignTop="@id/sem"
+                  android:layout_toEndOf="@id/sem"
+                  android:fontFamily="sans-serif-condensed"
+                  android:text="5th"
+                  android:textSize="15sp"
+                  android:textStyle="normal" />
+
+               <TextView
+                  android:id="@+id/price"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@id/sem"
+                  android:layout_marginStart="16dp"
+                  android:fontFamily="sans-serif-condensed"
+                  android:text="Price: "
+                  android:textSize="15sp"
+                  android:textStyle="bold" />
+
+               <TextView
+                  android:id="@+id/price2"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_alignTop="@id/price"
+                  android:layout_toEndOf="@id/price"
+                  android:fontFamily="sans-serif-condensed"
+                  android:text="₹300"
+                  android:textSize="15sp"
+                  android:textStyle="normal" />
+
+               <LinearLayout
+                  android:id="@+id/ll3"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@id/price"
+                  android:layout_marginStart="16dp"
+                  android:orientation="horizontal">
+
+
+                  <TextView
+                     android:id="@+id/date"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:fontFamily="sans-serif-condensed"
+                     android:text="Date: "
+                     android:textSize="15sp"
+                     android:textStyle="bold" />
+
+                  <TextView
+                     android:id="@+id/date_text"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:fontFamily="sans-serif-condensed"
+                     android:text="7-Sep-2017 5:30 PM"
+                     android:textSize="15sp"
+                     android:textStyle="normal" />
+
+               </LinearLayout>
+
+
+               <ImageView
+                  android:id="@+id/callImage"
+                  android:layout_width="24dp"
+                  android:layout_height="20dp"
+                  android:layout_below="@+id/ll3"
+                  android:layout_marginStart="16dp"
+                  android:layout_marginTop="2dp"
+                  android:layout_marginEnd="5dp"
+                  android:src="@drawable/callxml" />
+
+               <TextView
+                  android:id="@+id/phone_text"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_alignTop="@id/callImage"
+                  android:layout_toEndOf="@id/callImage"
+                  android:fontFamily="sans-serif-condensed"
+                  android:text="+917011152375"
+                  android:textColor="@color/blue"
+                  android:textSize="16sp"
+                  android:textStyle="bold" />
+
+               <LinearLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@+id/callImage"
+                  android:layout_marginTop="5dp"
+                  android:layout_marginBottom="5dp"
+                  android:orientation="horizontal"
+                  android:padding="5dp"
+                  android:paddingStart="10dp"
+                  android:paddingEnd="10dp"
+                  android:weightSum="100">
+
+                  <Button
+                     android:id="@+id/nBtn"
+                     android:layout_width="0dp"
+                     android:layout_height="35dp"
+                     android:layout_weight="50"
+                     android:background="@drawable/curved_shape2"
+                     android:text="Dismiss"
+                     android:textStyle="bold"
+                     android:fontFamily="sans-serif-condensed"
+                     android:textColor="#ffffff" />
+
+                  <Button
+                     android:id="@+id/pBtn"
+                     android:layout_width="0dp"
+                     android:layout_height="35dp"
+                     android:layout_marginStart="16dp"
+                     android:textStyle="bold"
+                     android:layout_weight="50"
+                     android:drawableStart="@drawable/callxml"
+                     android:paddingStart="30dp"
+                     android:paddingEnd="20dp"
+                     android:fontFamily="sans-serif-condensed"
+                     android:background="@drawable/curved_shape"
+                     android:text="Call"
+                     android:textColor="#ffffff" />
+               </LinearLayout>
             </RelativeLayout>
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/relativelayout1">
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="6dp">
-
-                    <TextView
-                        android:id="@+id/description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-condensed"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:text="Description: "
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/desc"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/description"
-                        android:fontFamily="sans-serif"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:text="Hi Ther This Is A Description box of fancy dialog in my app"
-                        android:textSize="15sp"
-                        android:textStyle="normal" />
-
-                    <LinearLayout
-                        android:id="@+id/ll2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_below="@id/desc">
-
-                        <TextView
-                            android:id="@+id/adres"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/desc"
-                            android:fontFamily="sans-serif-condensed"
-                            android:paddingLeft="16dp"
-                            android:text="Address: "
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
-
-
-
-                        <TextView
-                            android:id="@+id/address"
-                            android:layout_width="match_parent"
-                            android:textSize="15sp"
-                            android:fontFamily="sans-serif"
-                            android:textStyle="normal"
-                            android:maxLines="2"
-                            android:text="Boys Hostel 4 Room No. 254"
-                            android:layout_height="wrap_content" />
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/ll2"
-                        android:fontFamily="sans-serif-condensed"
-                        android:paddingLeft="16dp"
-                        android:text="Price: "
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/price2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="21dp"
-                        android:textStyle="normal"
-                        android:textSize="15sp"
-                        android:layout_toEndOf="@id/price"
-                        android:layout_alignTop="@id/price"
-                        android:text="₹300" />
-
-                    <TextView
-                        android:id="@+id/sem"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/price"
-                        android:fontFamily="sans-serif-condensed"
-                        android:paddingLeft="16dp"
-                        android:text="For Semester: "
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/semester_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="21dp"
-                        android:textStyle="normal"
-                        android:textSize="15sp"
-                        android:layout_toEndOf="@id/sem"
-                        android:layout_alignTop="@id/sem"
-                        android:text="5th" />
-
-                    <TextView
-                        android:id="@+id/date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/semester_text"
-                        android:fontFamily="sans-serif-condensed"
-                        android:paddingLeft="16dp"
-                        android:text="Posted On: "
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/date_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="21dp"
-                        android:textStyle="normal"
-                        android:fontFamily="sans-serif"
-                        android:textSize="15sp"
-                        android:text="7-Sep-2017 5:30 PM"
-                        android:layout_toEndOf="@id/date"
-                        android:layout_alignTop="@id/date"
-                         />
-
-                    <TextView
-                        android:id="@+id/cat"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/date"
-                        android:fontFamily="sans-serif-condensed"
-                        android:paddingLeft="16dp"
-                        android:text="Category: "
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/cate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="21dp"
-                        android:textStyle="normal"
-                        android:textSize="15sp"
-                        android:text="B.Tech"
-                        android:layout_toEndOf="@id/cat"
-                        android:layout_alignTop="@id/cat"
-                        />
-
-                    <ImageView
-                        android:id="@+id/callImage"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_alignStart="@+id/description"
-                        android:layout_below="@+id/cat"
-                        android:src="@drawable/call" />
-
-                    <TextView
-                        android:id="@+id/phone_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="21dp"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/blue"
-                        android:layout_toEndOf="@id/callImage"
-                        android:layout_alignTop="@id/callImage"
-                        android:text="+917011152375" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/callImage"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginTop="15dp"
-                        android:orientation="horizontal"
-                        android:paddingEnd="10dp"
-                        android:paddingStart="10dp"
-                        android:weightSum="100">
-
-                        <Button
-                            android:id="@+id/nBtn"
-                            android:layout_width="0dp"
-                            android:layout_height="35dp"
-                            android:layout_weight="50"
-                            android:background="@drawable/curved_shape2"
-                            android:text="Dismiss"
-                            android:textAllCaps="false"
-                            android:textColor="#ffffff" />
-
-                        <Button
-                            android:id="@+id/pBtn"
-                            android:layout_width="0dp"
-                            android:layout_height="35dp"
-                            android:layout_marginLeft="16dp"
-                            android:layout_weight="50"
-                            android:background="@drawable/curved_shape"
-                            android:text="Call"
-                            android:textAllCaps="false"
-                            android:textColor="#ffffff" />
-                    </LinearLayout>
-                </RelativeLayout>
-            </ScrollView>
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+         </ScrollView>
+      </RelativeLayout>
+   </android.support.v7.widget.CardView>
 
 </RelativeLayout>

@@ -24,9 +24,10 @@
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="6dp"
                 android:textStyle="italic"
-                android:textSize="16sp"
+                android:fontFamily="sans-serif"
+                android:textSize="15sp"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/first_heading_sell" />
 
@@ -34,9 +35,10 @@
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
                 android:layout_marginTop="5dp"
                 android:textStyle="italic"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/IInd_heading" />
 
@@ -46,8 +48,8 @@
                 android:inputType="textCapWords"
                 android:paddingStart="15dp"
                 android:paddingEnd="15dp"
-                android:maxLength="40"
-                android:layout_marginTop="25dp"
+                android:maxLength="50"
+                android:layout_marginTop="15dp"
                 android:background="@drawable/rounded_edittext"
                 android:layout_height="45dp"
                 android:hint="Enter Book Name" />
@@ -56,8 +58,12 @@
                 android:id="@+id/category"
                 android:layout_marginTop="5dp"
                 android:text="Select Category"
+                android:drawableStart="@drawable/category"
+                android:paddingStart="10dp"
                 android:textAllCaps="false"
-                android:textSize="16sp"
+                android:textSize="14sp"
+                android:textColor="#2f6699"
+                android:textAlignment="textEnd"
                 android:fontFamily="sans-serif"
                 android:paddingEnd="15dp"
                 android:textStyle="normal"
@@ -69,7 +75,7 @@
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:paddingStart="15dp"
-                android:maxLength="100"
+                android:maxLength="120"
                 android:paddingEnd="15dp"
                 android:layout_marginTop="5dp"
                 android:inputType="textMultiLine"
@@ -102,7 +108,7 @@
 
             <CheckBox
                 android:id="@+id/donate"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="3dp"
                 android:text="@string/sell_or_donate"
                 android:textStyle="normal"
                 android:layout_width="match_parent"
@@ -111,7 +117,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -120,7 +125,7 @@
                     android:layout_marginTop="4dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="5dp"
-                    android:src="@drawable/call" />
+                    android:src="@drawable/callxml" />
 
                 <EditText
                     android:id="@+id/phone"
@@ -148,6 +153,23 @@
 
 
             </LinearLayout>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/image_picker"
+                android:drawableStart="@drawable/camera"
+                android:paddingStart="10dp"
+                android:paddingEnd="15dp"
+                android:textSize="14sp"
+                android:textColor="#2f6699"
+                android:fontFamily="sans-serif"
+                android:layout_marginTop="5dp"
+                android:textAlignment="textEnd"
+                android:textAllCaps="false"
+                android:textStyle="normal"
+                android:background="@drawable/rounded_edittext"
+                style="?android:attr/borderlessButtonStyle"
+                android:text="Select Image"/>
         </LinearLayout>
     </ScrollView>
 

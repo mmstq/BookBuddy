@@ -13,7 +13,6 @@ public class SnackbarHelper {
         ViewCompat.setElevation(snackbar.getView(),1f);
     }
 
-
     private static void setRoundBordersBg(Context context, Snackbar snackbar) {
         snackbar.getView().setBackground(context.getDrawable(R.drawable.snackbar));
 

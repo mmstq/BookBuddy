@@ -30,6 +30,10 @@
                 android:id="@+id/other"/>
 
             <item
+                android:title="Free"
+                android:id="@+id/free"/>
+
+            <item
                 android:id="@+id/all"
                 android:title="All"/>
         </menu>

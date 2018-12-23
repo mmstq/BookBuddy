@@ -1,194 +1,130 @@
 package com.mmstq.bookbuddy;
 
 import android.app.Activity;
-import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
-import java.util.ArrayList;
-
-
-public class myAds extends Fragment {
-    private AdapterRecycler adapterRecycler;
-    private ArrayList<myData> list;
-    private RecyclerView rv;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private Activity activity;
-    private ProgressBarGIFDialog.Builder progressBarGIFDialog;
+import java.util.HashMap;
 
 
+public class myAds extends android.support.v4.app.Fragment {
+   private Adapter adapter;
+   private RecyclerView rv;
+   private Activity activity;
+   private ProgressDialog pd;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-    }
+   @Override
+   public void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+   }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.myads, container, false);
-        activity = getActivity();
-        progressBarGIFDialog= new ProgressBarGIFDialog.Builder(activity);
-        progressBarGIFDialog.setCancelable(false)
-                .setTitleColor(R.color.colorPrimary)
-                .setLoadingGifID(R.drawable.loading)
-                .setDoneGifID(R.drawable.done)
-                .setDoneTitle("Done")
-                .setLoadingTitle("Loading Your Ads");
+   @Override
+   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                            Bundle savedInstanceState) {
+      View rootView = inflater.inflate(R.layout.myads, container, false);
+      activity = getActivity();
+      pd = new ProgressDialog(activity);
+      pd.setMessage("Loading");
+      pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+      pd.setIndeterminate(true);
+      pd.setProgress(0);
 
-        Constant.which_method = true;
-        rv = (RecyclerView) rootView.findViewById(R.id.listview1);
-        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.str1);
-        onRun();
-        rv.addOnItemTouchListener(
-                new RecyclerItemClickListener((FragmentActivity) activity, rv ,new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, final int position) {
-                        startDialog(position);
-                    }
-                    @Override public void onLongItemClick(View view, int position) {
+      Constant.which_method = true;
+      rv = rootView.findViewById(R.id.listview1);
+      onRun();
+      adapter.setOnItemClickListener(new Adapter.OnItemClickListener() {
+         @Override
+         public void onItemClick(final myData model,View v) {
+            final PopupMenu menu = new PopupMenu(activity,v);
+            menu.getMenuInflater().inflate(R.menu.popup_delete,menu.getMenu());
+            menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+               @Override
+               public boolean onMenuItemClick(MenuItem item) {
+                  adapter.stopListening();
+                  HashMap<String,Object> map = new HashMap<>();
+                  DocumentReference dr = FirebaseFirestore.getInstance().collection("ads").document(String.valueOf(model.getTime()));
 
-                    }
-                })
-        );
-        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.str1);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                list.clear();
-                list = new ArrayList<>();
-                rv.setLayoutManager(null);
-                rv.setAdapter(null);
-                adapterRecycler.notifyDataSetChanged();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        onRun();
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 1800);
-            }
-        });
-        return rootView;
-    }
+                  if(model.getImage()!=null){
+                     FirebaseStorage.getInstance().getReferenceFromUrl(model.getImage()).delete();
+                  }
 
-    public void onRun() {
-        progressBarGIFDialog.build();
-        list = new ArrayList<>();
-        DatabaseReference dr = FirebaseDatabase.getInstance().getReference().child("ads").orderByChild("time").getRef();
-        Query query = dr.orderByChild("phone").equalTo(Constant.cellNumber);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    for(DataSnapshot ds: dataSnapshot.getChildren()){
-                        myData myData = ds.getValue(myData.class);
-                        list.add(0,myData);
-                    }
-                }else{
-                    Toast.makeText(activity,"No Ads Found",Toast.LENGTH_SHORT).show();
-                }
+                  map.put("time", FieldValue.delete());
+                  map.put("book", FieldValue.delete());
+                  map.put("description", FieldValue.delete());
+                  map.put("address", FieldValue.delete());
+                  map.put("phone", FieldValue.delete());
+                  map.put("semester", FieldValue.delete());
+                  map.put("price", FieldValue.delete());
+                  map.put("category",FieldValue.delete());
+                  map.put("image",FieldValue.delete());
+                  dr.update(map);
+                  Toast.makeText(activity,"Deleted",Toast.LENGTH_SHORT).show();
+                  adapter.startListening();
 
-                adapterRecycler = new AdapterRecycler(activity, list);
-                rv.setLayoutManager(new LinearLayoutManager(activity));
-                rv.setAdapter(adapterRecycler);
-                adapterRecycler.notifyDataSetChanged();
-                progressBarGIFDialog.clear();
-            }
+                  return true;
+               }
+            });
+            menu.show();
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+         }
+      });
+      return rootView;
+   }
 
-            }
-        });
-    }
-    private void startDialog(final int position){
-        TextView title,description, address, price, sem, phone_text, date_text,category;
-        Button nBtn, pBtn;
-        final Dialog dialog;
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setCancelable(true);
-        dialog.setContentView(R.layout.ads_dialog);
+   public void onRun() {
+      
+      CollectionReference dr = FirebaseFirestore.getInstance().collection("ads");
+      com.google.firebase.firestore.Query query;
+      query = dr.orderBy("phone").whereEqualTo("phone", Constant.cellNumber);
+      FirestoreRecyclerOptions<myData> options = new FirestoreRecyclerOptions.Builder<myData>()
+              .setQuery(query, myData.class)
+              .build();
 
-        category = (TextView)dialog.findViewById(R.id.cate);
-        category.setText(list.get(position).getCategory());
-        title = (TextView) dialog.findViewById(R.id.title1);
-        title.setText(list.get(position).getBook());
-        description = (TextView) dialog.findViewById(R.id.desc);
-        description.setText(list.get(position).getDescription());
-        address = (TextView) dialog.findViewById(R.id.address);
-        address.setText(list.get(position).getAddress());
-        price = (TextView) dialog.findViewById(R.id.price2);
-        price.setText(list.get(position).getPrice());
-        sem = (TextView) dialog.findViewById(R.id.semester_text);
-        sem.setText(list.get(position).getSemester());
-        phone_text = (TextView) dialog.findViewById(R.id.phone_text);
-        phone_text.setText(list.get(position).getPhone());
-        date_text = (TextView) dialog.findViewById(R.id.date_text);
-        date_text.setText(list.get(position).getTime());
+      pd.show();
+      adapter = new Adapter(options);
+      rv.setLayoutManager(new LinearLayoutManager(activity));
+      rv.setAdapter(adapter);
+      adapter.notifyDataSetChanged();
+      new Handler().postDelayed(new Runnable() {
+         @Override
+         public void run() {
+            pd.dismiss();
+         }
+      }, 500);
 
-        nBtn = (Button) dialog.findViewById(R.id.nBtn);
-        pBtn = (Button) dialog.findViewById(R.id.pBtn);
-        if(Constant.which_method){
-            pBtn.setText("Delete");
-        }
+   }
 
-        pBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseDatabase.getInstance().getReference("ads").orderByChild("time").equalTo(list.get(position).getTime()).addListenerForSingleValueEvent(
-                        new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for (DataSnapshot child: dataSnapshot.getChildren()) {
-                                    child.getRef().setValue(null);
-                                    Toast.makeText(activity,"Deleted",Toast.LENGTH_SHORT).show();
-                                    list.clear();
-                                    list = new ArrayList<>();
-                                    rv.setLayoutManager(null);
-                                    rv.setAdapter(null);
-                                    onRun();
-                                    dialog.dismiss();
-                                }
-                            }
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                Toast.makeText(activity,databaseError.getMessage(),Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            }
-        });
-        nBtn.setVisibility(View.VISIBLE);
-        nBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
+   @Override
+   public void onResume() {
+      super.onResume();
+      adapter.startListening();
+      Log.d("TAG", "hiii");
+   }
+
+   @Override
+   public void onPause() {
+      super.onPause();
+      adapter.stopListening();
+      Log.d("TAG", "hiii");
+   }
 }
+

@@ -1,7 +1,10 @@
 package com.mmstq.bookbuddy;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -18,39 +21,52 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.mindorks.paracamera.Camera;
 
-import java.util.Calendar;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Sell extends AppCompatActivity {
-    private EditText bookName;
-    private EditText add;
-    private EditText price;
-    private Context context;
-    private EditText description;
+    private EditText bookName,add,price,description,semester;
     private CheckBox cb;
-    private EditText semester;
-    private Button spinner;
+    private Button spinner,imgButton;
     private boolean empty;
-    private String category=null;
+    private long time;
+    private String category=null,path=null,downloadURL=null;
     private Map<String, Object> map;
+    private Camera camera;
+    private ProgressDialog pd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sell);
-        context= this;
-        bookName = (EditText) findViewById(R.id.bookname);
-        add = (EditText) findViewById(R.id.address);
-        final EditText phoneNo = (EditText) findViewById(R.id.phone);
-        price = (EditText) findViewById(R.id.price);
-        description = (EditText) findViewById(R.id.description);
-        semester = (EditText) findViewById(R.id.semester);
+        bookName = findViewById(R.id.bookname);
+        add = findViewById(R.id.address);
+        final EditText phoneNo = findViewById(R.id.phone);
+        price = findViewById(R.id.price);
+        description = findViewById(R.id.description);
+        semester = findViewById(R.id.semester);
         cb = findViewById(R.id.donate);
+
+        camera = new Camera.Builder()
+               .resetToCorrectOrientation(false)
+               .setTakePhotoRequestCode(1)
+               .setDirectory("Pics")
+               .setName("temp_" + System.currentTimeMillis())
+               .setImageFormat(Camera.IMAGE_JPEG)
+               .setCompression(50)
+               .setImageHeight(200)
+               .build(Sell.this);
 
         map = new HashMap<>();
         phoneNo.setText(Constant.cellNumber);
@@ -58,15 +74,14 @@ public class Sell extends AppCompatActivity {
         spinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final PopupMenu popupMenu = new PopupMenu(context,spinner);
+                final PopupMenu popupMenu = new PopupMenu(Sell.this,spinner);
                 popupMenu.getMenuInflater().inflate(R.menu.popup_menu,popupMenu.getMenu());
                 popupMenu.show();
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         category=String.valueOf(item.getTitle());
-                        Toast.makeText(context,category,Toast.LENGTH_SHORT).show();
-                        spinner.setText("Category > "+category);
+                        spinner.setText(String.format("Category > %s", category));
                         return true;
                     }
                 });
@@ -83,11 +98,36 @@ public class Sell extends AppCompatActivity {
             }
         });
 
+       imgButton = findViewById(R.id.image_picker);
+       imgButton.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+              try {
+                 camera.takePicture();
+              } catch (IllegalAccessException e) {
+                 e.printStackTrace();
+              }
+           }
+        });
     }
+   @Override
+   public void onActivityResult(int requestCode, int resultCode, Intent data) {
+      super.onActivityResult(requestCode, resultCode, data);
+      if(requestCode == Camera.REQUEST_TAKE_PHOTO) {
+         try {
+            path= camera.getCameraBitmapPath();
+            imgButton.setText(R.string.imgsltd);
+            imgButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.imgcheck,0,0,0);
+         } catch (Exception e) { path=null; }
+      }else {
+         Toast.makeText(Sell.this,"Select Valid Image",Toast.LENGTH_SHORT).show();
+      }
+
+   }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        final ProgressDialog pd = new ProgressDialog(Sell.this);
+        pd = new ProgressDialog(Sell.this);
         pd.setMessage("Posting Ad");
         pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         pd.setIndeterminate(true);
@@ -95,32 +135,20 @@ public class Sell extends AppCompatActivity {
 
         int id = item.getItemId();
         if(id==R.id.post){
-            FirebaseDatabase fr = FirebaseDatabase.getInstance();
-            final DatabaseReference dr = fr.getReference().child("ads/");
-            map.put("book", getBookName());
-            map.put("description", getDescription());
-            map.put("address", getAddress());
-            map.put("phone", Constant.cellNumber);
-            map.put("semester", getSemester());
-            map.put("price", getPrice());
-            map.put("time", getTime());
-            map.put("category",getSpinner());
 
-            if (empty) {
+           getTime();
+           map.put("time", time);
+           map.put("book", getBookName());
+           map.put("description", getDescription());
+           map.put("address", getAddress());
+           map.put("phone", Constant.cellNumber);
+           map.put("semester", getSemester());
+           map.put("price", getPrice());
+           map.put("category",getSpinner());
+
+            if (onCheck()) {
                 pd.show();
-                dr.push().setValue(map)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                pd.dismiss();
-                                Toast.makeText(Sell.this, "Done", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(Sell.this, "Error, Try Again", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                getImage();
             }else {
                 Toast.makeText(Sell.this, "Fill Details Properly", Toast.LENGTH_SHORT).show();
             }
@@ -137,22 +165,23 @@ public class Sell extends AppCompatActivity {
     private String getBookName(){
         if(TextUtils.isEmpty(bookName.getText())) {
             bookName.setError("Enter Book Name");
+            empty = false;
             bookName.requestFocus();
-            empty=false;
             return null;
         }
         return bookName.getText().toString();
 
     }
-    private String getTime(){
-        return java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-    }
+    private void getTime(){
+      time = System.currentTimeMillis();
+   }
     private String getAddress(){
         if(TextUtils.isEmpty(add.getText())) {
-            add.setError("Enter Author Name");
+            add.setError("Enter Address");
+            empty = false;
             add.requestFocus();
-            empty=false;
             return null;
+
         }
         return add.getText().toString();
     }
@@ -160,16 +189,16 @@ public class Sell extends AppCompatActivity {
         String price1;
         if(cb.isChecked()){
             empty=true;
-            price1 = "Free :)";
+            price1 = "Free";
         }else {
             if(TextUtils.isEmpty(price.getText())) {
                 price.setError("Enter Price");
+                empty = false;
                 price.requestFocus();
-                empty=false;
                 return null;
+
             }else {
                 price1= ("₹"+price.getText().toString());
-                empty=true;
             }
         }
         return price1 ;
@@ -177,9 +206,10 @@ public class Sell extends AppCompatActivity {
     private String getDescription(){
         if(TextUtils.isEmpty(description.getText())) {
             description.setError("Enter Description");
+            empty = false;
             description.requestFocus();
-            empty=false;
             return null;
+
         }
         return description.getText().toString();
     }
@@ -187,22 +217,127 @@ public class Sell extends AppCompatActivity {
         if(TextUtils.isEmpty(semester.getText())) {
             semester.setError("Enter Semester");
             semester.requestFocus();
-            empty=false;
+            empty = false;
             return null;
         }
         return semester.getText().toString();
     }
-
-    public String getSpinner() {
+    private String getSpinner() {
         if(category==null){
             spinner.setError("Select Category");
+            empty = false;
             spinner.requestFocus();
-            empty=false;
-            return null ;
-        }else {
-            empty=true;
+            return null;
+
         }
         return category;
 
     }
+    private boolean onCheck(){
+        if(category!=null){
+            if(!TextUtils.isEmpty(semester.getText())){
+                if(!TextUtils.isEmpty(description.getText())){
+                    if(!TextUtils.isEmpty(price.getText())){
+                        if(!TextUtils.isEmpty(add.getText())){
+                            if(!TextUtils.isEmpty(bookName.getText())){
+                                empty = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return empty;
+    }
+    private void getImage(){
+
+       if(path!=null){
+
+          Uri file = Uri.fromFile(new File(path));
+          StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+          final StorageReference mountainsRef = storageRef.child("images/"+file.getLastPathSegment());
+
+          mountainsRef.putFile(file).addOnFailureListener(new OnFailureListener() {
+             @Override
+             public void onFailure(@NonNull Exception exception) {
+                pd.dismiss();
+                AlertDialog.Builder builder = new AlertDialog.Builder(Sell.this);
+                builder.setMessage("Failed To Upload Image\n" +
+                        "Click 'Continue' To Post Ad w/o Image or " +
+                        "Click 'Re-Try' Otherwise.").setTitle("Error").setIcon(R.drawable.attention);
+                builder.setPositiveButton("Continue Anyway", new DialogInterface.OnClickListener() {
+                   @Override
+                   public void onClick(DialogInterface dialog, int which) {
+                      uploadFinal();
+                      dialog.dismiss();
+                      pd.show();
+                   }
+                }).setNegativeButton("Re-Try", new DialogInterface.OnClickListener() {
+                   @Override
+                   public void onClick(DialogInterface dialog, int which) {
+                      getImage();
+                      dialog.dismiss();
+                      pd.show();
+                   }
+                }).create().show();
+             }
+          }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+             @Override
+             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                mountainsRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                   @Override
+                   public void onSuccess(Uri uri) {
+                      downloadURL = uri.toString();
+                      uploadFinal();
+                   }
+                });
+             }
+          });
+       }else {
+          pd.dismiss();
+          AlertDialog.Builder builder = new AlertDialog.Builder(Sell.this);
+          builder.setMessage("No Image Found\nContinue Without Image?").setTitle("No Image");
+          builder.setIcon(R.drawable.attention);
+          builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+             @Override
+             public void onClick(DialogInterface dialog, int which) {
+                uploadFinal();
+                dialog.dismiss();
+                pd.show();
+             }
+          }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+             @Override
+             public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+             }
+          }).create().show();
+       }
+    }
+    private void uploadFinal(){
+
+       DocumentReference dr = FirebaseFirestore.getInstance().collection("ads").document(String.valueOf(time));
+
+      map.put("image",downloadURL);
+      dr.set(map)
+              .addOnCompleteListener(new OnCompleteListener<Void>() {
+                 @Override
+                 public void onComplete(@NonNull Task<Void> task) {
+                    pd.dismiss();
+                    Toast.makeText(Sell.this, "Done", Toast.LENGTH_SHORT).show();
+                    finish();
+
+                 }
+              }).addOnFailureListener(new OnFailureListener() {
+         @Override
+         public void onFailure(@NonNull Exception e) {
+            Toast.makeText(Sell.this, "Error, Try Again", Toast.LENGTH_SHORT).show();
+         }
+      });
+   }
+    @Override
+    protected void onDestroy() {
+      super.onDestroy();
+      camera.deleteImage();
+   }
+
 }

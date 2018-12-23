@@ -12,12 +12,35 @@
             android:background="@color/darkgrey"
             android:layout_gravity="center">
 
-            <ImageView
-                android:layout_width="145dp"
-                android:layout_height="145dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/me" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="145dp"
+                    android:layout_height="145dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/me" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:layout_marginEnd="9dp"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textAlignment="center"
+                    android:text="@string/app_about"
+                    android:textColor="#FFEDE8CE"
+                    android:layout_gravity="center"
+                    android:textStyle="italic|bold" />
+
+
+            </LinearLayout>
+
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -104,9 +127,20 @@
                 android:layout_marginStart="50dp"
                 android:textSize="15sp"
                 android:fontFamily="sans-serif"
-                android:text="+917011152375\nMushtakkhan9@gmail.com"
+                android:text="7011152375\nMushtakkhan9@gmail.com"
                 android:textColor="#FFEDE8CE"
                 android:textStyle="normal" />
+
+            <Button
+                android:id="@+id/link"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/gitlogo"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_gravity="center"/>
+
         </LinearLayout>
 
 </FrameLayout>
